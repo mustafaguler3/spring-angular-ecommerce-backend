@@ -23,4 +23,9 @@ public class Type {
 
     @OneToMany(mappedBy = "type",fetch = FetchType.LAZY)
     private Set<Product> products = new HashSet<>();
+
+    public Type(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }

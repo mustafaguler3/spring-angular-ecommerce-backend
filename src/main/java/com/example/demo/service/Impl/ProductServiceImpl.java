@@ -8,6 +8,8 @@ import com.example.demo.service.MappingService;
 import com.example.demo.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -25,14 +27,14 @@ public class ProductServiceImpl implements ProductService {
     private MappingService mappingService;
 
     @Override
-    public List<ProductDto> getProducts() {
-        List<Product> products = productRepository.findAll();
+    public Page<ProductDto> getProducts(Pageable pageable) {
+        Page<Product> products = productRepository.findAll(pageable);
 
         if (products == null){
             throw new ResourceNotFoundException("Products not found");
         }
 
-        List<ProductDto> productDto = products.stream().map(mappingService::mapProductToProductDto).collect(Collectors.toList());
+        Page<ProductDto> productDto = products.map(mappingService::mapProductToProductDto);
 
         return productDto;
     }
@@ -45,6 +47,49 @@ public class ProductServiceImpl implements ProductService {
         ProductDto returnedProduct = mappingService.mapProductToProductDto(product);
         log.info("Product with id {}",returnedProduct);
         return returnedProduct;
+    }
+
+    @Override
+    public List<ProductDto> searchProductByName(String keyword) {
+        List<Product> products = productRepository.searchByName(keyword);
+
+        if (products == null){
+            throw new ResourceNotFoundException("Product not found with by {}");
+        }
+
+        List<ProductDto> product = products.stream().map(mappingService::mapProductToProductDto)
+                .collect(Collectors.toList());
+
+        return product;
+    }
+
+    @Override
+    public List<ProductDto> searchByBrand(Integer brandId) {
+        List<Product> products = productRepository.searchByBrand(brandId);
+
+        if (products == null){
+            throw new ResourceNotFoundException("Products not found with {} type");
+        }
+
+        List<ProductDto> productDtos =
+                products.stream().map(mappingService::mapProductToProductDto)
+                        .collect(Collectors.toList());
+
+        return productDtos;
+    }
+
+    @Override
+    public List<ProductDto> searchByType(Integer typeId) {
+        List<Product> products = productRepository.searchByType(typeId);
+
+        if (products == null){
+            throw new ResourceNotFoundException("Products not found with this type");
+        }
+        List<ProductDto> productDtos = products.stream()
+                .map(mappingService::mapProductToProductDto)
+                .collect(Collectors.toList());
+
+        return productDtos;
     }
 
     private ProductDto productToProductDto(Product product){

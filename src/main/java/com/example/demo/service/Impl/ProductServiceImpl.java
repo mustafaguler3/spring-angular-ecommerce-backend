@@ -92,6 +92,20 @@ public class ProductServiceImpl implements ProductService {
         return productDtos;
     }
 
+    @Override
+    public List<ProductDto> searchByTypeAndBrand(Integer typeId, Integer brandId) {
+        List<Product> products = productRepository.searchByTypeAndBrand(typeId,brandId);
+
+        if (products == null){
+            throw new ResourceNotFoundException("Products not found related to type and brand");
+        }
+
+        List<ProductDto> productDtos = products.stream().map(mappingService::mapProductToProductDto)
+                .collect(Collectors.toList());
+
+        return productDtos;
+    }
+
     private ProductDto productToProductDto(Product product){
         return ProductDto.builder()
                 .id(product.getId())

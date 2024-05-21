@@ -20,6 +20,7 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
     @Query("select p from Product p where p.type.id =:typeId")
     List<Product> searchByType(@Param("typeId") Integer typeId);
 
+    @Query("select p from Product p where p.type.id =:typeId AND p.brand.id =:brandId")
     List<Product> searchByTypeAndBrand(@Param("typeId") Integer typeId,@Param("brandId") Integer brandId);
 }
 

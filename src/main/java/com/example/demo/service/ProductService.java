@@ -15,4 +15,5 @@ public interface ProductService {
     List<ProductDto> searchProductByName(String keyword);
     List<ProductDto> searchByBrand(Integer brandId);
     List<ProductDto> searchByType(Integer typeId);
+    List<ProductDto> searchByTypeAndBrand(Integer typeId,Integer brandId);
 }

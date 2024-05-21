@@ -36,6 +36,13 @@ public class ProductsController  {
             ) {
         var products = productService.getProducts(pageable);
 
+        if (typeId != null && brandId != null){
+            List<ProductDto> productDtos = productService.searchByTypeAndBrand(typeId,brandId);
+            Page<ProductDto> paged = new PageImpl<>(productDtos,pageable,productDtos.size());
+
+            return new ApiResponse<>(HttpStatus.OK,"Success",paged);
+        }
+
         if (typeId != null){
             List<ProductDto> productDtos = productService.searchByType(typeId);
             Page<ProductDto> pagedList = new PageImpl<>(productDtos,pageable,productDtos.size());

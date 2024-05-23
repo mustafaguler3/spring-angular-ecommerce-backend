@@ -1,8 +1,6 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.ProductDto;
-import com.example.demo.exception.GlobalExceptionHandling;
-import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.response.ApiResponse;
 import com.example.demo.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +9,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,7 +26,7 @@ public class ProductsController  {
 
     @GetMapping
     public ApiResponse<Page<ProductDto>> getProducts(
-            @PageableDefault(size = 10)Pageable pageable,
+            @PageableDefault(size = 10) Pageable pageable,
             @RequestParam(value = "keyword",required = false) String keyword,
             @RequestParam(value = "brandId",required = false) Integer brandId,
             @RequestParam(value = "typeId",required = false) Integer typeId

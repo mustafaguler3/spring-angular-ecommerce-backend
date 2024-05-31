@@ -7,7 +7,6 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-@EnableWebMvc
 public class CorsConfig implements WebMvcConfigurer {
 
     // CorsMapping will be done
@@ -15,7 +14,7 @@ public class CorsConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/*/**")
                 .allowedHeaders("*")
-                .allowedOrigins("*")
+                .allowedOrigins("https://localhost:4200","http://localhost:4200")
                 .allowedMethods("GET","POST","PUT","PATCH","DELETE");
     }
 
@@ -23,7 +22,7 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // "/images/products/**" URL'sini "classpath:/static/images/products/" klasörüne yönlendir
-        registry.addResourceHandler("/images/products/**")
+        registry.addResourceHandler("/*/images/products/**")
                 .addResourceLocations("classpath:/static/images/products/**");
     }
 }

@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.BrandDto;
 import com.example.demo.dto.ProductDto;
 import com.example.demo.response.ApiResponse;
+import com.example.demo.service.BrandService;
 import com.example.demo.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,14 +20,16 @@ import java.util.List;
 public class ProductsController  {
 
     private ProductService productService;
+    private final BrandService brandService;
 
     @Autowired
-    public ProductsController(ProductService productService) {
+    public ProductsController(ProductService productService, BrandService brandService) {
         this.productService = productService;
+        this.brandService = brandService;
     }
 
     @GetMapping
-    public ApiResponse<Page<ProductDto>> getProducts(
+    public  ApiResponse<Page<ProductDto>> getProducts(
             @PageableDefault(size = 10) Pageable pageable,
             @RequestParam(value = "keyword",required = false) String keyword,
             @RequestParam(value = "brandId",required = false) Integer brandId,
@@ -61,7 +65,7 @@ public class ProductsController  {
             return new ApiResponse<Page<ProductDto>>(HttpStatus.OK, "Success Data Got",paged);
         }
 
-        return new ApiResponse<Page<ProductDto>>(HttpStatus.OK,"Success Data",products);
+        return new ApiResponse<Page<ProductDto>>(products);
     }
 
     @GetMapping("/{id}")
@@ -69,6 +73,13 @@ public class ProductsController  {
         var product = productService.getProductById(id);
 
         return new ApiResponse<>(HttpStatus.OK,product);
+    }
+
+    @GetMapping("/brands")
+    public ApiResponse<List<BrandDto>> getBrands(){
+        var brands =  brandService.getBrands();
+
+        return new ApiResponse<>(brands);
     }
 
 }

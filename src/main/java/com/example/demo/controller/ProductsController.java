@@ -2,9 +2,11 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.BrandDto;
 import com.example.demo.dto.ProductDto;
+import com.example.demo.dto.TypeDto;
 import com.example.demo.response.ApiResponse;
 import com.example.demo.service.BrandService;
 import com.example.demo.service.ProductService;
+import com.example.demo.service.TypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -21,11 +23,13 @@ public class ProductsController  {
 
     private ProductService productService;
     private final BrandService brandService;
+    private final TypeService typeService;
 
     @Autowired
-    public ProductsController(ProductService productService, BrandService brandService) {
+    public ProductsController(ProductService productService, BrandService brandService, TypeService typeService) {
         this.productService = productService;
         this.brandService = brandService;
+        this.typeService = typeService;
     }
 
     @GetMapping
@@ -80,6 +84,13 @@ public class ProductsController  {
         var brands =  brandService.getBrands();
 
         return new ApiResponse<>(brands);
+    }
+
+    @GetMapping("/types")
+    public ApiResponse<List<TypeDto>> getTypes(){
+        var types =  typeService.getTypes();
+
+        return new ApiResponse<>(types);
     }
 
 }
